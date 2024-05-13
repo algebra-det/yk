@@ -1,15 +1,15 @@
 import express from 'express'
 import helmet from 'helmet'
-import config from 'config'
-import startCrawling from './crawler/fetchAndStore'
+import 'dotenv/config'
 
+import startCrawling from './crawler/fetchAndStore'
 import logger from './utils/logger'
 
 import routes from './routes'
 import errorHandler from './utils/errorHandler'
 import ErrorResponse from './responses/ErrorResponse'
 
-const port = config.get<number>('port')
+const port = process.env.PORT
 
 const app = express()
 
