@@ -11,17 +11,19 @@ const validate =
         query: req.query,
         params: req.params
       })
-      
+
       if (schema.shape.body) req.body = parsedObject.body
       if (schema.shape.query) req.query = parsedObject.query
       if (schema.shape.params) req.params = parsedObject.params
-      console.log('Parsed Params: ', req.params);
-      
-      
+      console.log('Parsed Params: ', req.params)
+
       next()
     } catch (error: any) {
       if (error instanceof ZodError) {
-        const errors = error.errors.map(q => ({message:q.message, keys: q.path}))
+        const errors = error.errors.map(q => ({
+          message: q.message,
+          keys: q.path
+        }))
         // const errors = error.errors.map(q => (q.message))
         throw new ErrorResponse(400, 'Validation Error', errors)
       }

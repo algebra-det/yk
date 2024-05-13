@@ -4,10 +4,14 @@ import {
   deleteClientHandler,
   getAllClientHandler,
   getSingleClientHandler,
-  updateClientHandler,
+  updateClientHandler
 } from '../controller/client.controller'
 import validateResource from '../middleware/validateResource'
-import { clientSchema, paramSchema, updateSchema } from '../schema/client.schema'
+import {
+  clientSchema,
+  paramSchema,
+  updateSchema
+} from '../schema/client.schema'
 const router = express.Router()
 
 router.get('/', getAllClientHandler)

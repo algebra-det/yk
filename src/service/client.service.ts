@@ -10,15 +10,24 @@ export const getSingleClient = async (id: number) => {
   return db.client.findUnique({ where: { id } })
 }
 
-export const createClient = async (input: ClientInput['body']) => {
+export const isAlreadyPresent = async (input: UpdateInput['body']) => {
   const alreadyPresent = await db.client.findFirst({
     where: {
-      name: input.name,
-      cin: input.cin,
-      link: input.link,
-      pin_code: input.pin_code
+      OR: [
+        {
+          name: input.name
+        },
+        {
+          cin: input.cin
+        }
+      ]
     }
   })
+  return Boolean(alreadyPresent)
+}
+
+export const createClient = async (input: ClientInput['body']) => {
+  const alreadyPresent = await isAlreadyPresent(input)
   if (alreadyPresent)
     throw new ErrorResponse(400, 'Client with details already available')
   return await db.client.create({ data: input })
@@ -26,7 +35,7 @@ export const createClient = async (input: ClientInput['body']) => {
 
 export const updateClient = async (id: number, input: UpdateInput['body']) => {
   if (Object.keys(input).length)
-    return await db.client.update({ where: { id: id }, data: {...input} })
+    return await db.client.update({ where: { id: id }, data: { ...input } })
   return updateClient
 }
 

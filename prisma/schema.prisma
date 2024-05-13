@@ -28,7 +28,7 @@ model Client {
 
 
   state String
-  pin_code Int @unique
+  pin_code Int
   country String
   address String
   email String
