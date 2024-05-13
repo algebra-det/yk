@@ -2,8 +2,15 @@ import ErrorResponse from '../responses/ErrorResponse'
 import { ClientInput, UpdateInput } from '../schema/client.schema'
 import db from '../utils/connect'
 
-export const getAllClient = async () => {
-  return db.client.findMany({})
+export const getTotalCount = async () => {
+  return db.client.count()
+}
+
+export const getAllClient = async (limit: number, offset: number) => {
+  return db.client.findMany({
+    skip: offset,
+    take: limit
+  })
 }
 
 export const getSingleClient = async (id: number) => {

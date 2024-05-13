@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
-import { ClientInput, ParamInput } from '../schema/client.schema'
+import { ClientInput, ParamInput, QueryInput } from '../schema/client.schema'
 import {
   createClient,
   deleteClient,
   getAllClient,
   getSingleClient,
+  getTotalCount,
   updateClient
 } from '../service/client.service'
 import asyncHandler from '../utils/asyncHandler'
@@ -12,16 +13,26 @@ import ApiResponse from '../responses/ApiResponse'
 import ErrorResponse from '../responses/ErrorResponse'
 
 export const getAllClientHandler = asyncHandler(
-  async (req: Request, res: Response) => {
-    const user = await getAllClient()
+  async (req: Request<{}, {}, {}, QueryInput['query']>, res: Response) => {
+    const { page = 1, limit = 3 } = req.query
+    const offset = (page - 1) * limit
+    const totalCount = await getTotalCount()
+
+    const totalPages = Math.ceil(totalCount / limit)
+
+    const user = await getAllClient(limit, offset)
     return res.json(
-      new ApiResponse({ user }, 'Client fetched successfully', 201)
+      new ApiResponse(
+        { user, totalPages, page, limit },
+        'Client fetched successfully',
+        201
+      )
     )
   }
 )
 
 export const getSingleClientHandler = asyncHandler(
-  async (req: Request<ParamInput['params']>, res: Response) => {
+  async (req: Request<any>, res: Response) => {
     const user = await getSingleClient(req.params.id)
     if (!user) throw new ErrorResponse(404, 'Client Not Found')
     return res.json(
@@ -39,7 +50,7 @@ export const createClientHandler = asyncHandler(
   }
 )
 export const updateClientHandler = asyncHandler(
-  async (req: Request<ParamInput['params']>, res: Response) => {
+  async (req: Request<any>, res: Response) => {
     const isPresent = await getSingleClient(req.params.id)
     if (!isPresent) throw new ErrorResponse(404, 'Client Not Found')
     const user = await updateClient(req.params.id, req.body)
@@ -50,7 +61,7 @@ export const updateClientHandler = asyncHandler(
 )
 
 export const deleteClientHandler = asyncHandler(
-  async (req: Request<ParamInput['params']>, res: Response) => {
+  async (req: Request<any>, res: Response) => {
     const isPresent = await getSingleClient(req.params.id)
     if (!isPresent) throw new ErrorResponse(404, 'Client Not Found')
     await deleteClient(req.params.id)

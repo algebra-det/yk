@@ -91,6 +91,14 @@ export const paramSchema = z.object({
   })
 })
 
+export const querySchema = z.object({
+  query: z.object({
+    limit: z.coerce.number().min(0).max(100).optional(),
+    page: z.coerce.number().min(1).optional()
+  })
+})
+
 export type ClientInput = TypeOf<typeof clientSchema>
 export type UpdateInput = TypeOf<typeof updateSchema>
 export type ParamInput = TypeOf<typeof paramSchema>
+export type QueryInput = TypeOf<typeof querySchema>

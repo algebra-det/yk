@@ -10,11 +10,12 @@ import validateResource from '../middleware/validateResource'
 import {
   clientSchema,
   paramSchema,
+  querySchema,
   updateSchema
 } from '../schema/client.schema'
 const router = express.Router()
 
-router.get('/', getAllClientHandler)
+router.get('/', validateResource(querySchema), getAllClientHandler)
 router.post('/', validateResource(clientSchema), createClientHandler)
 router.get('/:id', validateResource(paramSchema), getSingleClientHandler)
 router.post('/:id', validateResource(updateSchema), updateClientHandler)

@@ -15,7 +15,6 @@ const validate =
       if (schema.shape.body) req.body = parsedObject.body
       if (schema.shape.query) req.query = parsedObject.query
       if (schema.shape.params) req.params = parsedObject.params
-      console.log('Parsed Params: ', req.params)
 
       next()
     } catch (error: any) {
