@@ -10,6 +10,7 @@ import errorHandler from './utils/errorHandler'
 import ErrorResponse from './responses/ErrorResponse'
 
 const port = process.env.PORT
+const startCrawler = process.env.START_CRAWLER || false
 
 const app = express()
 
@@ -28,7 +29,7 @@ process.on('SIGINT', async () => {
 app.listen(port, () => {
   logger.info(`Application listening at : http://localhost:${port}`)
   routes(app)
-  // startCrawling()
+  if (startCrawler) startCrawling()
   app.use('*', (_req, res) => {
     throw new ErrorResponse(404, 'No route found')
   })
