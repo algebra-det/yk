@@ -48,7 +48,7 @@ export const baseBody = {
       required_error: 'paid_up_capital is required'
     }),
     link: z.string({
-      required_error: 'paid_up_capital is required'
+      required_error: 'link is required'
     }),
     state: z.string({
       required_error: 'state is required'
@@ -103,3 +103,9 @@ export type ClientInput = TypeOf<typeof clientSchema>
 export type UpdateInput = TypeOf<typeof updateSchema>
 export type ParamInput = TypeOf<typeof paramSchema>
 export type QueryInput = TypeOf<typeof querySchema>
+
+export type ClientOutput = ClientInput['body'] & {
+  id: number
+  createdAt: Date;
+  updatedAt: Date;
+}
