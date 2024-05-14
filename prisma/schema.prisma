@@ -24,7 +24,7 @@ model Client {
   authorised_capital Int
   paid_up_capital Int
 
-  link String @unique
+  link String
 
 
   state String
