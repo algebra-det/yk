@@ -14,13 +14,13 @@ import ErrorResponse from '../responses/ErrorResponse'
 
 export const getAllClientHandler = asyncHandler(
   async (req: Request<{}, {}, {}, QueryInput['query']>, res: Response) => {
-    const { page = 1, limit = 3 } = req.query
+    const { page = 1, limit = 3, q = '' } = req.query
     const offset = (page - 1) * limit
-    const totalCount = await getTotalCount()
+    const totalCount = await getTotalCount(q)
 
     const totalPages = Math.ceil(totalCount / limit)
 
-    const user = await getAllClient(limit, offset)
+    const user = await getAllClient(limit, offset, q)
     return res.json(
       new ApiResponse(
         { user, totalPages, page, limit },

@@ -93,6 +93,7 @@ export const paramSchema = z.object({
 
 export const querySchema = z.object({
   query: z.object({
+    q: z.string().optional(),
     limit: z.coerce.number().min(0).max(100).optional(),
     page: z.coerce.number().min(1).optional()
   })
