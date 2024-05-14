@@ -50,6 +50,8 @@ const getKeyValuesViaSelector = (
 
 const startCrawling = async () => {
   // await db.client.deleteMany({ where: {} })
+
+  // GET All company urls from Main Page
   const baseUrl = 'https://www.companydetails.in'
   const url = `${baseUrl}/latest-registered-company-mca`
 
