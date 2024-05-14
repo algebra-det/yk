@@ -27,3 +27,7 @@ pnpm run dev
 ```
 
 And navigate to [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
+
+PostMan Collection URL
+[https://documenter.getpostman.com/view/30343427/2sA3JQ4z8G](https://documenter.getpostman.com/view/30343427/2sA3JQ4z8G)
+
