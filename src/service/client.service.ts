@@ -5,7 +5,6 @@ import db from '../utils/connect'
 const getQueryArgs = (q: string) => {
   const query: Record<string, any> = {}
   const parsed = parseInt(q) || q.toLocaleLowerCase()
-  console.log('Parsed: ', parsed)
 
   if (typeof parsed === 'string') {
     query.where = {
