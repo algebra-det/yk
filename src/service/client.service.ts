@@ -72,9 +72,7 @@ export const createClient = async (input: ClientInput['body']) => {
 }
 
 export const updateClient = async (id: number, input: UpdateInput['body']) => {
-  if (Object.keys(input).length)
-    return await db.client.update({ where: { id: id }, data: { ...input } })
-  return updateClient
+  return await db.client.update({ where: { id: id }, data: { ...input } })
 }
 
 export const deleteClient = async (id: number) => {

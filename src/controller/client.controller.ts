@@ -53,6 +53,8 @@ export const updateClientHandler = asyncHandler(
   async (req: Request<any>, res: Response) => {
     const isPresent = await getSingleClient(req.params.id)
     if (!isPresent) throw new ErrorResponse(404, 'Client Not Found')
+    if (!Object.keys(req.body).length)
+      throw new ErrorResponse(404, 'No Data provided for update')
     const client = await updateClient(req.params.id, req.body)
     return res.json(
       new ApiResponse({ client }, 'Client updated successfully', 201)
