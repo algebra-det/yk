@@ -1,5 +1,6 @@
 import express from 'express'
 import helmet from 'helmet'
+import cors from 'cors'
 import 'dotenv/config'
 
 import startCrawling from './crawler/fetchAndStore'
@@ -14,6 +15,7 @@ const startCrawler = process.env.START_CRAWLER || false
 
 const app = express()
 
+app.use(cors())
 app.use(helmet())
 app.use(express.json())
 

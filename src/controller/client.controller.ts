@@ -20,10 +20,10 @@ export const getAllClientHandler = asyncHandler(
 
     const totalPages = Math.ceil(totalCount / limit)
 
-    const user = await getAllClient(limit, offset, q)
+    const clients = await getAllClient(limit, offset, q)
     return res.json(
       new ApiResponse(
-        { user, totalPages, page, limit },
+        { clients, totalPages, page, limit },
         'Client fetched successfully',
         201
       )
@@ -33,19 +33,19 @@ export const getAllClientHandler = asyncHandler(
 
 export const getSingleClientHandler = asyncHandler(
   async (req: Request<any>, res: Response) => {
-    const user = await getSingleClient(req.params.id)
-    if (!user) throw new ErrorResponse(404, 'Client Not Found')
+    const client = await getSingleClient(req.params.id)
+    if (!client) throw new ErrorResponse(404, 'Client Not Found')
     return res.json(
-      new ApiResponse({ user }, 'Client fetched successfully', 201)
+      new ApiResponse({ client }, 'Client fetched successfully', 201)
     )
   }
 )
 
 export const createClientHandler = asyncHandler(
   async (req: Request<{}, {}, ClientInput['body']>, res: Response) => {
-    const user = await createClient(req.body)
+    const client = await createClient(req.body)
     return res.json(
-      new ApiResponse({ user }, 'Client created successfully', 201)
+      new ApiResponse({ client }, 'Client created successfully', 201)
     )
   }
 )
@@ -53,9 +53,9 @@ export const updateClientHandler = asyncHandler(
   async (req: Request<any>, res: Response) => {
     const isPresent = await getSingleClient(req.params.id)
     if (!isPresent) throw new ErrorResponse(404, 'Client Not Found')
-    const user = await updateClient(req.params.id, req.body)
+    const client = await updateClient(req.params.id, req.body)
     return res.json(
-      new ApiResponse({ user }, 'Client updated successfully', 201)
+      new ApiResponse({ client }, 'Client updated successfully', 201)
     )
   }
 )
