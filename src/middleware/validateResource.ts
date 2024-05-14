@@ -19,10 +19,16 @@ const validate =
       next()
     } catch (error: any) {
       if (error instanceof ZodError) {
-        const errors = error.errors.map(q => ({
-          message: q.message,
-          keys: q.path
-        }))
+        console.log('validation Error: ', error.errors);
+        
+        // const errors = error.errors.map(q => ({
+        //   message: q.message,
+        //   keys: q.path
+        // }))
+        const errors = error.errors.map(q => {
+          const [_, key] = q.path
+          return `${key}: ${q.message}`
+        })
         // const errors = error.errors.map(q => (q.message))
         throw new ErrorResponse(400, 'Validation Error', errors)
       }
