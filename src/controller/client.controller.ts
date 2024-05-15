@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { ClientInput, ParamInput, QueryInput } from '../schema/client.schema'
+import { ClientInput, ParamInput, QueryInput, UpdateInput } from '../schema/client.schema'
 import {
   createClient,
   deleteClient,
@@ -66,7 +66,7 @@ export const createClientHandler = asyncHandler(
   }
 )
 export const updateClientHandler = asyncHandler(
-  async (req: Request<any>, res: Response) => {
+  async (req: Request<any, {}, UpdateInput['body']>, res: Response) => {
     const isPresent = await getSingleClient(req.params.id)
     if (!isPresent) throw new ErrorResponse(404, 'Client Not Found')
     if (!Object.keys(req.body).length)
