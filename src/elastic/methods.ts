@@ -44,12 +44,12 @@ export const getMatchingFromElastic = async (str: string) => {
     query: {
       query_string: {
         query: str,
-        // fields,
+        fields,
       }
       // multi_match: {
       //   query: str,
       //   fields,
-      //   // fuzziness: '2'
+      //   fuzziness: '2'
       // }
     }
   })
