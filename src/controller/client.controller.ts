@@ -59,7 +59,7 @@ export const getSingleClientHandler = asyncHandler(
 export const createClientHandler = asyncHandler(
   async (req: Request<{}, {}, ClientInput['body']>, res: Response) => {
     const client = await createClient(req.body)
-    addToElastic(client)
+    await addToElastic(client)
     return res.json(
       new ApiResponse({ client }, 'Client created successfully', 201)
     )
@@ -72,7 +72,7 @@ export const updateClientHandler = asyncHandler(
     if (!Object.keys(req.body).length)
       throw new ErrorResponse(404, 'No Data provided for update')
     const client = await updateClient(req.params.id, req.body)
-    updateInElastic(client)
+    await updateInElastic(client)
     return res.json(
       new ApiResponse({ client }, 'Client updated successfully', 201)
     )
@@ -84,7 +84,7 @@ export const deleteClientHandler = asyncHandler(
     const isPresent = await getSingleClient(req.params.id)
     if (!isPresent) throw new ErrorResponse(404, 'Client Not Found')
     await deleteClient(req.params.id)
-    deleteSingleFromElastic(req.params.id)
+    await deleteSingleFromElastic(req.params.id)
     return res.json(new ApiResponse({}, 'Client Deleted successfully', 204))
   }
 )

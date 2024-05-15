@@ -19,8 +19,7 @@ const validate =
       next()
     } catch (error: any) {
       if (error instanceof ZodError) {
-        console.log('validation Error: ', error.errors);
-        
+        console.log('validation Error: ', error.errors)
         // const errors = error.errors.map(q => ({
         //   message: q.message,
         //   keys: q.path
