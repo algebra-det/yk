@@ -3,7 +3,6 @@ import {
   createClientHandler,
   deleteClientHandler,
   getAllClientHandler,
-  getQuerySearchClientHandler,
   getSingleClientHandler,
   updateClientHandler
 } from '../controller/client.controller'
@@ -18,7 +17,6 @@ const router = express.Router()
 
 router.get('/', validateResource(querySchema), getAllClientHandler)
 router.post('/', validateResource(clientSchema), createClientHandler)
-router.get('/query', validateResource(querySchema), getQuerySearchClientHandler)
 router.get('/:id', validateResource(paramSchema), getSingleClientHandler)
 router.post('/:id', validateResource(updateSchema), updateClientHandler)
 router.delete('/:id', validateResource(paramSchema), deleteClientHandler)

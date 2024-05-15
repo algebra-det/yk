@@ -42,10 +42,15 @@ export const getMatchingFromElastic = async (str: string) => {
   const res = await client.search({
     index: 'client',
     query: {
-      multi_match: {
+      query_string: {
         query: str,
-        fields
+        // fields,
       }
+      // multi_match: {
+      //   query: str,
+      //   fields,
+      //   // fuzziness: '2'
+      // }
     }
   })
   return res

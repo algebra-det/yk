@@ -20,39 +20,29 @@ import {
 
 export const getAllClientHandler = asyncHandler(
   async (req: Request<{}, {}, {}, QueryInput['query']>, res: Response) => {
-    const { page = 1, limit = 20, q = '' } = req.query
+    const { page = 1, limit = 20, q = '', query = '' } = req.query
     const offset = (page - 1) * limit
-    const totalCount = await getTotalCount(q)
+    let data: Record<string, any> = {}
+    if (!q) {
+      // MySQL Search : Based on 'query' query
+      const totalCount = await getTotalCount(query)
+      const totalPages = Math.ceil(totalCount / limit)
+      const clients = await getAllClient(limit, offset, query)
+      data = { clients, totalPages, page, limit }
+    } else {
+      // Elastic Search : Based on 'q' query
+      if (q.length <= 2)
+        throw new ErrorResponse(400, 'Search with atleast 3 keywords')
 
-    const totalPages = Math.ceil(totalCount / limit)
-
-    const clients = await getAllClient(limit, offset, q)
-    return res.json(
-      new ApiResponse(
-        { clients, totalPages, page, limit },
-        'Client fetched successfully',
-        201
-      )
-    )
-  }
-)
-
-export const getQuerySearchClientHandler = asyncHandler(
-  async (req: Request<{}, {}, {}, QueryInput['query']>, res: Response) => {
-    const { q = '' } = req.query
-    if (q.length <= 2)
-      throw new ErrorResponse(400, 'Search with atleast 3 keywords')
-
-    const results = await getMatchingFromElastic(q)
-    const totalCount =
-      typeof results.hits.total === 'object'
-        ? results.hits.total.value
-        : results.hits.total
-    const clients = results.hits.hits.map(q => q._source)
-
-    return res.json(
-      new ApiResponse({ clients, totalCount }, 'Client fetched successfully', 201)
-    )
+      const results = await getMatchingFromElastic(q)
+      const totalCount =
+        typeof results.hits.total === 'object'
+          ? results.hits.total.value
+          : results.hits.total
+      const clients = results.hits.hits.map(q => q._source)
+      data = { clients, totalCount }
+    }
+    return res.json(new ApiResponse(data, 'Client fetched successfully', 201))
   }
 )
 
