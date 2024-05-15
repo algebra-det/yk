@@ -49,7 +49,7 @@ export const baseBody = {
     }),
     link: z.string({
       required_error: 'link is required'
-    }),
+    }).default(''),
     state: z.string({
       required_error: 'state is required'
     }),
