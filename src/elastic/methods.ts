@@ -3,13 +3,14 @@ import logger from '../utils/logger'
 import client from './connect'
 
 const getElasticObject = (data: ClientOutput) => {
-  const indexData = {
-    id: data.id,
-    name: data.name,
-    email: data.email,
-    cin: data.cin
-  }
-  return indexData
+  // const indexData = {
+  //   id: data.id,
+  //   name: data.name,
+  //   email: data.email,
+  //   cin: data.cin
+  // }
+  // return indexData
+  return data
 }
 
 export const addToElastic = async (data: ClientOutput) => {
@@ -35,11 +36,15 @@ export const updateInElastic = async (data: ClientOutput) => {
 }
 
 export const getMatchingFromElastic = async (str: string) => {
+  const fields = ['email', 'cin', 'name']
+  if (parseInt(str)) fields.push('id')
+
   const res = await client.search({
     index: 'client',
     query: {
-      query_string: {
-        query: str
+      multi_match: {
+        query: str,
+        fields
       }
     }
   })
