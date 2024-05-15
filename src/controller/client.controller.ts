@@ -40,11 +40,18 @@ export const getAllClientHandler = asyncHandler(
 export const getQuerySearchClientHandler = asyncHandler(
   async (req: Request<{}, {}, {}, QueryInput['query']>, res: Response) => {
     const { q = '' } = req.query
-    if(q.length <= 2) throw new ErrorResponse(400, 'Search with atleast 3 keywords')
-    
-    const clients = await getMatchingFromElastic(q)
+    if (q.length <= 2)
+      throw new ErrorResponse(400, 'Search with atleast 3 keywords')
+
+    const results = await getMatchingFromElastic(q)
+    const totalCount =
+      typeof results.hits.total === 'object'
+        ? results.hits.total.value
+        : results.hits.total
+    const clients = results.hits.hits.map(q => q._source)
+
     return res.json(
-      new ApiResponse({ clients }, 'Client fetched successfully', 201)
+      new ApiResponse({ clients, totalCount }, 'Client fetched successfully', 201)
     )
   }
 )
